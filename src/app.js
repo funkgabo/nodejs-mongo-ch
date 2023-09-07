@@ -19,7 +19,7 @@ const app = express()
 const PORT = 4000
 
 //Conexión a Mongoose
-mongoose.connect('mongodb+srv://admin:coderhouse@litswm.b362gwa.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://<user>:<password>@litswm.b362gwa.mongodb.net/?retryWrites=true&w=majority')
     .then(() => console.log('DB Connected'))
     .catch(() => console.log('Error connecting to DB'))
 
