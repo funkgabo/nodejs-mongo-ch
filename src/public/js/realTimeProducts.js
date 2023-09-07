@@ -7,15 +7,14 @@ socket.emit('loadProducts')
 
 socket.on('products', (products) => {
     products.forEach(element => {
-        table.innerHTML += `<tr id='row${element.id}'>
-        <td>${element.nombre}</td>
+        table.innerHTML += `<tr id='row${element._id}'>
+        <td>${element.title}</td>
         <td>${element.description}</td>
-        <td>${element.categoria}</td>
-        <td>${element.precio}</td>
-        <td>${element.color}</td>
+        <td>${element.category}</td>
+        <td>${element.price}</td>
         <td>${element.stock}</td>
         <td>${element.code}</td>
-        <td><button onclick='deleteProduct(${element.id})'>Eliminar</button></td>
+        <td><button onclick="deleteProduct('${element._id}')">Eliminar</button></td>
       </tr>`
     });
 })

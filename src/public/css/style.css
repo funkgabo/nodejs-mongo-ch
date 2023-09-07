@@ -49,3 +49,7 @@ footer {
 .container {
     min-height: calc(100vh - 127px);
 }
+form.chat { 
+    width: 100%;
+    max-width: 900px;
+}
