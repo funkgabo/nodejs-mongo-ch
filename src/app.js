@@ -13,14 +13,17 @@ import userRouter from './routes/users.routes.js';
 import chatRouter from './routes/chat.routes.js';
 import { productModel } from './models/products.models.js';
 import { messageModel } from './models/messages.models.js';
-
+import { userModel } from './models/users.models.js';
+import 'dotenv/config'
 
 const app = express()
 const PORT = 4000
 
 //Conexión a Mongoose
-mongoose.connect('mongodb+srv://<user>:<password>@litswm.b362gwa.mongodb.net/?retryWrites=true&w=majority')
-    .then(() => console.log('DB Connected'))
+mongoose.connect(process.env.MONGO_URL)
+    .then(async() => {
+        await userModel.create()
+        console.log('DB Connected')})
     .catch(() => console.log('Error connecting to DB'))
 
 //Config

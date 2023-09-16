@@ -4,10 +4,14 @@ import { productModel } from "../models/products.models.js";
 const productRouter = Router()
 
 productRouter.get('/', async (req, res) => {
-    const { limit } = req.query
-
+    let { limit } = req.query
+    let { page } = req.query
+    let { sort } = req.query
+    let { category } = req.query
+    limit = limit ?? 10
+    page = page ?? 1
     try {
-        const prods = await productModel.find().limit(limit)
+        const prods = await productModel.paginate(category ? { category: category } : {}, { limit: limit, page: page, sort: { price: sort } })
         res.status(200).send({ respuesta: 'OK', mensaje: prods })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error en consultar productos', mensaje: error })
