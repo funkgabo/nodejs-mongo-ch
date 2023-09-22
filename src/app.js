@@ -15,6 +15,11 @@ import { productModel } from './models/products.models.js';
 import { messageModel } from './models/messages.models.js';
 import { userModel } from './models/users.models.js';
 import 'dotenv/config'
+import sessionRouter from './routes/session.routes.js';
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import loginRouter from './routes/login.routes.js';
+import MongoStore from 'connect-mongo'
 
 const app = express()
 const PORT = 4000
@@ -37,12 +42,27 @@ const storage = multer.diskStorage({
 })
 
 const serverExpress = app.listen(PORT, () => {
-    console.log(`Server on http://localhost:${PORT}/static/home`)
+    console.log(`Server on http://localhost:${PORT}/static/login`)
 })
 
 //Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser(process.env.SIGNED_COOKIE)) // La cookie esta firmada
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URL,
+        mongoOptions: {
+            useNewUrlParser: true, //Establezco que la conexion sea mediante URL
+            useUnifiedTopology: true //Manego de clusters de manera dinamica
+        },
+        ttl: 60 //Duracion de la sesion en la BDD en segundos
+
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false, //Fuerzo a que se intente guardar a pesar de no tener modificacion en los datos
+    saveUninitialized: false //Fuerzo a guardar la session a pesar de no tener ningun dato
+}))
 
 app.engine('handlebars', engine()) //Defino que motor de plantillas voy a utilizar y su config
 app.set('view engine', 'handlebars') //Setting de mi app de hbs
@@ -92,6 +112,7 @@ io.on('connection', (socket) => {
         const messages = await messageModel.find()
         socket.emit('mensajes', messages)
     })
+
 })
 
 //Routes
@@ -103,6 +124,8 @@ app.use('/api/carts', cartRouter)
 app.use('/api/users', userRouter)
 app.use('/static/chat', chatRouter)
 app.use('/static/realTimeProducts', realTimeProductsRouter)
+app.use('/static/session', sessionRouter)
+app.use('/static/login', loginRouter)
 
 
 /*app.get('/static', (req, res) => {
