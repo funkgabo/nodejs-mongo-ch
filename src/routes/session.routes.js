@@ -28,7 +28,7 @@ sessionRouter.post('/login', async (req, res) => {
     }
 })
 
-sessionRouter.get('/logout', (req, res) => {
+sessionRouter.post('/logout', (req, res) => {
     if (req.session.login || req.session.user) {
         req.session.destroy()
     }
