@@ -1,3 +1,5 @@
+<h1>Bienvenido {{name}}</h1>
+<span>Rol tipo: {{rol}}</span>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -12,3 +14,9 @@
     <tbody class="table-group-divider" id="tableBody">
     </tbody>
   </table>
+
+<br><br>
+
+<form action="/static/session/logout" method="get">
+    <input type="submit" value="logout" />
+</form>
