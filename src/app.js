@@ -20,6 +20,8 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import loginRouter from './routes/login.routes.js';
 import MongoStore from 'connect-mongo'
+import initializePassport from './config/passport.js'
+import passport from 'passport'
 
 const app = express()
 const PORT = 4000
@@ -63,6 +65,10 @@ app.use(session({
     resave: false, //Fuerzo a que se intente guardar a pesar de no tener modificacion en los datos
     saveUninitialized: false //Fuerzo a guardar la session a pesar de no tener ningun dato
 }))
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine('handlebars', engine()) //Defino que motor de plantillas voy a utilizar y su config
 app.set('view engine', 'handlebars') //Setting de mi app de hbs
