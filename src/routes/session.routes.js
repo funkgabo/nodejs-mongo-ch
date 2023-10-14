@@ -1,5 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
+import { passportError, authorization } from "../utils/messagesError.js";
+import { generateToken } from "../utils/jwt.js";
 
 const sessionRouter = Router()
 
@@ -52,5 +54,13 @@ sessionRouter.get('/githubCallback', passport.authenticate('github'), async (req
     res.status(200).send({ mensaje: 'Usuario logueado' })
 })
 
+sessionRouter.get('/testJWT', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log(req)
+    res.send(req.user)
+})
+
+sessionRouter.get('/current', passportError('jwt'), authorization('admin'), (req, res) => {
+    res.send(req.user)
+})
 
 export default sessionRouter

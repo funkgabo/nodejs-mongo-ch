@@ -130,7 +130,7 @@ app.use('/api/carts', cartRouter)
 app.use('/api/users', userRouter)
 app.use('/static/chat', chatRouter)
 app.use('/static/realTimeProducts', realTimeProductsRouter)
-app.use('/static/session', sessionRouter)
+app.use('/static/sessions', sessionRouter)
 app.use('/static/login', loginRouter)
 
 
