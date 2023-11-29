@@ -15,7 +15,8 @@ sessionRouter.post('/login', passport.authenticate('login'), async (req, res) =>
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             age: req.user.age,
-            email: req.user.email
+            email: req.user.email,
+            rol: req.user.rol
         }
 
         const token = generateToken(req.user)
@@ -24,7 +25,7 @@ sessionRouter.post('/login', passport.authenticate('login'), async (req, res) =>
             maxAge: 43200000
         })
 
-        res.status(200).send({ payload: req.user })
+        res.status(200).redirect('/static/home')
     } catch (error) {
         res.status(500).send({ mensaje: `Error al iniciar sesion ${error}` })
     }
@@ -66,7 +67,7 @@ sessionRouter.get('/testJWT', passport.authenticate('jwt', { session: false }), 
     res.send(req.user)
 })
 
-sessionRouter.get('/current', passportError('jwt'), authorization('admin'), (req, res) => {
+sessionRouter.get('/current', passportError('jwt'), authorization('user'), (req, res) => {
     res.send(req.user)
 })
 

@@ -1,5 +1,8 @@
 import { Router } from "express";
 import { userModel } from "../models/users.models.js";
+import passport from "passport";
+import { cartModel } from "../models/carts.models.js";
+import { productModel } from "../models/products.models.js";
 
 const userRouter = Router()
 
@@ -26,14 +29,23 @@ userRouter.get('/:id', async (req, res) => {
     }
 })
 
-userRouter.post('/', async (req, res) => {
-    const { first_name, last_name, age, email, password } = req.body
+userRouter.post('/', passport.authenticate('register'), async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).send({ mensaje: "Usuario ya existente" })
+        }
+
+        res.status(200).send({ mensaje: 'Usuario registrado' })
+    } catch (error) {
+        res.status(500).send({ mensaje: `Error al registrar usuario ${error}` })
+    }
+    /* const { first_name, last_name, age, email, password } = req.body
     try {
         const respuesta = await userModel.create({ first_name, last_name, age, email, password })
         res.status(200).send({ respuesta: 'OK', mensaje: respuesta })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error en crear usuario', mensaje: error })
-    }
+    } */
 })
 
 userRouter.put('/:id', async (req, res) => {
@@ -63,6 +75,26 @@ userRouter.delete('/:id', async (req, res) => {
     } catch (error) {
         res.status(400).send({ respuesta: 'Error en eliminar usuario', mensaje: error })
     }
+})
+
+userRouter.post('/:uid', async (req, res) => {
+    const { uid } = req.params
+    const user = await userModel.findById(uid)
+    if (!user.cart) {
+        const cart = await cartModel.create({})
+        user.cart = await cartModel.findById(cart._id)
+    }
+    user.save()
+    res.send('User Cart Created')
+})
+
+userRouter.post('/:pid/:uid', async (req, res) => {
+    const { pid, uid } = req.params
+    const product = await productModel.findById(pid)
+    const user = await userModel.findById(uid)
+    user.cart = { ...user.cart, product}
+    user.save()
+    res.send('Product Added to Cart')
 })
 
 export default userRouter

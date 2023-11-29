@@ -13,9 +13,9 @@ export const passportError = (strategy) => { //Voy a enviar local, github o jwt
                 return res.status(401).send({ error: info.messages ? info.messages : info.toString() })
 
             }
-
             req.user = user
             next()
+
         })(req, res, next) //Esto es por que me va a llamar un middleware
 
     }

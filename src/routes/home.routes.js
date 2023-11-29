@@ -7,7 +7,7 @@ homeRouter.get('/', (req, res) => {
         css: "style.css",
         title: "Home",
         js: "home.js",
-        name: req.session.user.firstName,
+        name: req.session.user.first_name,
         rol: req.session.user.rol
     })
 })

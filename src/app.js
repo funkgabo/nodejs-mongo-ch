@@ -130,8 +130,8 @@ app.use('/api/carts', cartRouter)
 app.use('/api/users', userRouter)
 app.use('/static/chat', chatRouter)
 app.use('/static/realTimeProducts', realTimeProductsRouter)
-app.use('/static/sessions', sessionRouter)
 app.use('/static/login', loginRouter)
+app.use('/static/sessions', sessionRouter)
 
 
 /*app.get('/static', (req, res) => {
@@ -159,4 +159,3 @@ app.post('/upload', upload.single('product'), (req, res) => {
     console.log(req.body)
     res.status(200).send("Imagen cargada")
 })
-
